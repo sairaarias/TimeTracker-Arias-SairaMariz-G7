@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Administrator Dashboard - TimeTracker{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <div class="d-flex align-items-center mb-1">
+            <h2 class="fw-bold mb-0 me-3">Administrator Dashboard</h2>
+            <span class="badge badge-role-admin px-3 py-2 rounded-pill">
+                <i class="bi bi-shield-lock-fill me-1"></i>Admin Access
+            </span>
+        </div>
+        <p class="text-muted mb-0">Welcome back, <strong>{{ user.display_name }}</strong>. Overview of organizational attendance and personnel records.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{% url 'profile' %}" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-person me-1"></i>My Profile
+        </a>
+        <a href="{% url 'logout' %}" class="btn btn-danger">
+            <i class="bi bi-box-arrow-right me-1"></i>Log Out
+        </a>
+    </div>
+</div>
+
+<!-- Admin Stats Cards -->
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="card p-3 border-0 shadow-sm bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small text-uppercase fw-bold">Total Employees</div>
+                    <div class="fs-2 fw-bold text-dark mt-1">{{ total_staff }}</div>
+                </div>
+                <div class="bg-primary-subtle text-primary rounded-3 p-3">
+                    <i class="bi bi-people-fill fs-3"></i>
+                </div>
+            </div>
+            <div class="small text-muted mt-2">Active personnel registered</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card p-3 border-0 shadow-sm bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small text-uppercase fw-bold">Present Today</div>
+                    <div class="fs-2 fw-bold text-success mt-1">--</div>
+                </div>
+                <div class="bg-success-subtle text-success rounded-3 p-3">
+                    <i class="bi bi-check-circle-fill fs-3"></i>
+                </div>
+            </div>
+            <div class="small text-muted mt-2">Live timestamp verified</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card p-3 border-0 shadow-sm bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small text-uppercase fw-bold">Leave Requests</div>
+                    <div class="fs-2 fw-bold text-warning mt-1">0</div>
+                </div>
+                <div class="bg-warning-subtle text-warning rounded-3 p-3">
+                    <i class="bi bi-envelope-paper-fill fs-3"></i>
+                </div>
+            </div>
+            <div class="small text-muted mt-2">Pending admin approval</div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 col-lg-3">
+        <div class="card p-3 border-0 shadow-sm bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="text-muted small text-uppercase fw-bold">System Admins</div>
+                    <div class="fs-2 fw-bold text-purple mt-1">{{ admins_count }}</div>
+                </div>
+                <div class="bg-info-subtle text-info rounded-3 p-3">
+                    <i class="bi bi-person-fill-gear fs-3"></i>
+                </div>
+            </div>
+            <div class="small text-muted mt-2">Authorized managers</div>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Management Sections -->
+<div class="row g-4 mb-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0"><i class="bi bi-person-lines-fill text-primary me-2"></i>Recently Registered Personnel</h5>
+                <span class="badge bg-secondary-subtle text-secondary">{{ recent_users|length }} Accounts</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table align-middle table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Employee ID</th>
+                            <th>Date Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in recent_users %}
+                            <tr>
+                                <td>
+                                    <div class="fw-semibold text-dark">{{ u.display_name }}</div>
+                                    <small class="text-muted">{{ u.email }}</small>
+                                </td>
+                                <td>
+                                    {% if u.is_admin_role %}
+                                        <span class="badge badge-role-admin px-2 py-1 rounded-pill">Admin</span>
+                                    {% else %}
+                                        <span class="badge badge-role-employee px-2 py-1 rounded-pill">Employee</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ u.department|default:"--" }}</td>
+                                <td><code>{{ u.employee_id|default:"--" }}</code></td>
+                                <td class="small text-muted">{{ u.date_joined|date:"M d, Y" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">No registered personnel found.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white py-3">
+                <h5 class="fw-bold mb-0"><i class="bi bi-gear-fill text-primary me-2"></i>Admin Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary text-start p-3" type="button" disabled>
+                        <i class="bi bi-file-earmark-spreadsheet me-2 fs-5"></i>
+                        <span class="fw-semibold">Generate Payroll Report</span>
+                        <div class="small text-muted">Exports CSV / Excel with timestamp calculations</div>
+                    </button>
+                    <button class="btn btn-outline-success text-start p-3" type="button" disabled>
+                        <i class="bi bi-calendar-check me-2 fs-5"></i>
+                        <span class="fw-semibold">Review Leave Requests</span>
+                        <div class="small text-muted">Approve or decline staff leave applications</div>
+                    </button>
+                    <button class="btn btn-outline-dark text-start p-3" type="button" disabled>
+                        <i class="bi bi-qr-code-scan me-2 fs-5"></i>
+                        <span class="fw-semibold">Attendance Log Station</span>
+                        <div class="small text-muted">Kiosk mode for campus entrance clocking</div>
+                    </button>
+                </div>
+                <div class="alert alert-info mt-3 mb-0 small">
+                    <i class="bi bi-info-circle me-1"></i>Attendance logging and payroll generation modules will be activated in upcoming project phases.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

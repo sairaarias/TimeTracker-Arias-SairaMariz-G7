@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - TimeTracker{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-lg-8 col-md-10">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white py-3 border-bottom">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary text-white rounded-3 p-2 me-3">
+                        <i class="bi bi-person-plus-fill fs-5"></i>
+                    </div>
+                    <div>
+                        <h4 class="mb-0 fw-bold">Create an Account</h4>
+                        <small class="text-muted">Register to join your organization's digital attendance system</small>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <div><i class="bi bi-exclamation-circle-fill me-1"></i>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <h6 class="text-uppercase text-muted fw-bold small mb-3">1. Account Credentials</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="{{ form.username.id_for_label }}" class="form-label fw-semibold">
+                                Username <span class="text-danger">*</span>
+                            </label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.username.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.email.id_for_label }}" class="form-label fw-semibold">
+                                Email Address <span class="text-danger">*</span>
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.email.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.password.id_for_label }}" class="form-label fw-semibold">
+                                Password <span class="text-danger">*</span>
+                            </label>
+                            {{ form.password }}
+                            <div class="form-text small">{{ form.password.help_text }}</div>
+                            {% if form.password.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.password.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.password_confirm.id_for_label }}" class="form-label fw-semibold">
+                                Confirm Password <span class="text-danger">*</span>
+                            </label>
+                            {{ form.password_confirm }}
+                            {% if form.password_confirm.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.password_confirm.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h6 class="text-uppercase text-muted fw-bold small mb-3">2. Personal &amp; Organization Details</h6>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="{{ form.first_name.id_for_label }}" class="form-label fw-semibold">
+                                First Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.first_name.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.last_name.id_for_label }}" class="form-label fw-semibold">
+                                Last Name <span class="text-danger">*</span>
+                            </label>
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.last_name.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.role.id_for_label }}" class="form-label fw-semibold">
+                                System Role <span class="text-danger">*</span>
+                            </label>
+                            {{ form.role }}
+                            <div class="form-text small">Select Administrator or Employee.</div>
+                            {% if form.role.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.role.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.employee_id.id_for_label }}" class="form-label fw-semibold">
+                                Employee / Staff ID
+                            </label>
+                            {{ form.employee_id }}
+                            {% if form.employee_id.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.employee_id.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.department.id_for_label }}" class="form-label fw-semibold">
+                                Department / Office
+                            </label>
+                            {{ form.department }}
+                            {% if form.department.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.department.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="{{ form.contact_number.id_for_label }}" class="form-label fw-semibold">
+                                Contact Number
+                            </label>
+                            {{ form.contact_number }}
+                            {% if form.contact_number.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.contact_number.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-12">
+                            <label for="{{ form.profile_photo.id_for_label }}" class="form-label fw-semibold">
+                                Profile Photo <span class="text-muted fw-normal">(Optional)</span>
+                            </label>
+                            {{ form.profile_photo }}
+                            {% if form.profile_photo.errors %}
+                                <div class="text-danger small mt-1">
+                                    {% for err in form.profile_photo.errors %}{{ err }} {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg fw-semibold">
+                            <i class="bi bi-person-check-fill me-2"></i>Complete Registration
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <span class="text-muted">Already registered?</span>
+                    <a href="{% url 'login' %}" class="fw-semibold text-decoration-none ms-1">Sign In here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
